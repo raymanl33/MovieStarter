@@ -1,7 +1,7 @@
 // Add DOM selectors to target input and UL movie list
 const inp = document.querySelector("input");
 const myMovieList = document.querySelector("ul");
-const Movie = []
+let Movie = []
 
 // Example of a simple function that clears the input after a user types something in
 const clearInput = () => {
@@ -45,11 +45,81 @@ const addMovie = () => {
 const filterSearch = () => {
     const filterInput = document.querySelector('#filter')
     const filterInner = filterInput.value;
-    console.log(filterInner)
+    
     const filter = Movie.filter(word => (word.includes(filterInner)) );
     filterInput.addEventListener("keyup", filter)
-    
-    
+    console.log(Movie.length)
+    for (i = 0; i < Movie.length; i++) {
+        if (Movie.includes(filter[0]) && filterInner.length != 0) {
+            
+            for (num in Movie) {
+                if (filter[0] === Movie[num]) {
+                    document.querySelectorAll('li')[num].innerText = Movie[num]
+                } else if (filter[num] != Movie[num]) {
+                    document.querySelectorAll('li')[num].innerText = ''
+                }
+                // const li = document.createElement("li"); 
+                // const textToInsert = document.createTextNode(Movie[num]);
+                // li.appendChild(textToInsert);
+
+
+                // myMovieList.appendChild(li);
+
+
+
+                // if (filter[num] === Movie[num]) {
+                //     let filter_replace = filter[num]
+                //     document.querySelectorAll('li')[num].innerHTML = filter_replace
+                // }
+                // else {
+                    // document.querySelectorAll('li')[num].innerHTML = '' 
+                
+                // console.log(filter)
+                // let filter_replace = filter[num]
+                // document.querySelectorAll('li')[num].innerHTML = filter_replace 
+
+
+         
+
+            }
+          
+            // filterInput.insertBefore(filterul);
+
+            // const quick_filter = document.createElement('li');
+            
+            // const word_suggestion = document.createTextNode(Movie)
+            // quick_filter.appendChild(word_suggestion)
+            // document.querySelector('#filterli').appendChild(word_suggestion)
+
+        } else if (Movie.includes(filter[0]) === false || filterInner.length === 0) {
+            
+            // li_del.remove()
+            // Movie.splice([i], [i])
+            // console.log(Movie)
+            for (count in Movie) {
+                console.log(Movie[count])
+                let filter_replace = Movie[count]
+                document.querySelectorAll('li')[count].innerHTML = filter_replace 
+
+                // const filter_li = document.createElement('li');
+                // filter_li.textContent = word
+                // document.querySelector('li').appendChild(filter_li)
+
+            }
+            // const textToInsert = document.createTextNode(userTypedText);
+
+            // Step 4: Insert text into li
+            // <li>Harry Potter </li>
+            // li.appendChild(textToInsert);
+        
+            // Step 5: Insert the <li>Harry Potter</li> INTO the <ul>
+            // myMovieList.appendChild(li);
+        }
+            
+     
+
+        
+    }
     console.log(filter)
 }
 // const filterInput = document.querySelector('#filter')
