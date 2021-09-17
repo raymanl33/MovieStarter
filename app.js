@@ -60,7 +60,13 @@ const filterSearch = () => {
                 }
             }
 
-        } else if (Movie.includes(filter[0]) === false || filterInner.length === 0) {
+        } else if (Movie.includes(filter[0]) === false) {
+            const Movie_li = document.querySelectorAll('li')
+            for (count in Movie_li) {
+                Movie_li[count].innerHTML = ''
+            }
+
+        } else if (filterInner.length === 0) {
     
             for (count in Movie) {
                 console.log(Movie[count])
