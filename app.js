@@ -1,11 +1,44 @@
 // Add DOM selectors to target input and UL movie list
 const inp = document.querySelector("input");
 const myMovieList = document.querySelector("ul");
-let Movie = []
+const Movie = []
+const movie_dict = {}
+
+
+// SetItem and getItem values using localStorage
+const SetGetItem = () => {
+    if (localStorage.length > 0) {
+        let num = 0
+        while (num < localStorage.length) {
+            // localStorage Movie Lists
+            let key_value = localStorage.key(num);
+            let viewed_value = localStorage.getItem(key_value)
+            const li = document.createElement("li"); // <li></li>
+            const textToInsert = document.createTextNode(key_value)
+            li.appendChild(textToInsert);
+            myMovieList.appendChild(li);
+            Movie.push(key_value)
+            console.log(Movie)
+
+            // localStorage Movie History
+            movie_dict[key_value] = Number(viewed_value);
+            console.log(movie_dict)
+            num++;
+            
+
+        }
+        
+        
+    }
+}
+
+SetGetItem();
+
 
 // Example of a simple function that clears the input after a user types something in
 const clearInput = () => {
     inp.value = "";
+    
 }
 
 const clearMovies = () => {
@@ -16,31 +49,38 @@ const clearMovies = () => {
 // This function is executed when the user clicks [ADD MOVIE] button.
 const addMovie = () => {
     // Step 1: Get value of input
-    userTypedText = inp.value;
+    const li = document.createElement("li"); // <li></li>
+    const userTypedText = inp.value;
     if (userTypedText.length === 0) {
         alert('The input cannot be blank, please enter again!')
     } else {
-        const li = document.createElement("li"); // <li></li>
-        Movie.push(userTypedText)
-        console.log(Movie)
+        if (localStorage.getItem(userTypedText) == null) {
+            li;
+            const storedMovie = localStorage.setItem(userTypedText, 1);
+            movie_dict[userTypedText] = 1;
+            Movie.push(userTypedText);
+            console.log(movie_dict);
+            const textToInsert = document.createTextNode(userTypedText);
+            li.appendChild(textToInsert);
+            myMovieList.appendChild(li);
+            console.log(storedMovie)
+            
+
+        } else if (movie_dict[userTypedText] >= 1) {
+            const add = movie_dict[userTypedText] + 1
+            const storedMovie = localStorage.setItem(userTypedText, `${add}`)
+            movie_dict[userTypedText] = Number(add)
+            console.log(movie_dict)
+        }
+
+ 
+        MovieHistory();
+        Add_Movie_History();
     
-    // Step 2: Create an empty <li></li>
-    
-
-    // Step 3: Prepare the text we will insert INTO that li ^...example: Harry Potter
-    const textToInsert = document.createTextNode(userTypedText);
-
-    // Step 4: Insert text into li
-    // <li>Harry Potter </li>
-    li.appendChild(textToInsert);
-
-    // Step 5: Insert the <li>Harry Potter</li> INTO the <ul>
-    myMovieList.appendChild(li);
-
-    // Step 6: Call the clearInput function to clear the input field
     clearInput();
     }
 }
+
 
 const filterSearch = () => {
     const filterInput = document.querySelector('#filter')
@@ -53,7 +93,7 @@ const filterSearch = () => {
         if (Movie.includes(filter[0]) && filterInner.length != 0) {
             
             for (num in Movie) {
-                if (filter[0] === Movie[num]) {
+                if (filter[0].toLowerCase() === Movie[num].toLowerCase()) {
                     document.querySelectorAll('li')[num].innerText = Movie[num]
                 } else if (filter[num] != Movie[num]) {
                     document.querySelectorAll('li')[num].innerText = ''
@@ -80,16 +120,62 @@ const filterSearch = () => {
     }
     console.log(filter)
 }
-// const filterInput = document.querySelector('#filter')
-// const filter = Movie.filter(word => word.length >= 0);
-// filterInput.addEventListener("keyup", filter)
 
 
-// console.log(filter)
+const MovieHistory = () => {
+    let i = 0
+    while (i < Movie.length) {
+      for (const num in Movie) {
+        if (Movie[num] in movie_dict) {
+          movie_dict[Movie[num]] = Number(num) + 1;
+          i++;
+        } else {
+          movie_dict[Movie[num]] = 1;
+          
+          i++;
+        }
+       
+    }
+    
+}
+}
+
+const Add_Movie_History = () => {
+    let table = document.createElement('table')
+    table.setAttribute("width", "100%");
+
+    const tr = document.createElement('tr')
+    const th = document.createElement('th')
+    const td = document.createElement('td')
+    const Movie_history = document.querySelector('#movieHistoryCard')
+    const style = document.querySelector('table')
 
 
+    Movie_history.appendChild(table)
+    table.appendChild(tr)
+    const Title = document.createTextNode('Title')
+    const Times = document.createTextNode('Views')
+    
+    tr.appendChild(th)
+    th.appendChild(Title)
+    th.appendChild(Times)
+    
+    // let count = 0
+    // while (count < Movie.length) {
+    //     for (const num in Movie) {
+    //         if (movie_dict[Movie[num]] > 1) {
+    //             console.log('More than once')
+    //             conut++ ;
+    //         } else {
+    //             let valueToInsert = document.createTextNode(`${Movie[num]}`)
+    //             th.appendChild(valueToInsert)
+    //             let keyToInsert = document.createTextNode(movie_dict[Movie[num]])
+    //             th.appendChild(keyToInsert)
+    //             count++ ;
+    //         }
+    
+            
+    //     }
 
-// *** use local storage to remember the last used 
-
-// localStorage.setItem()
-// localStorage.getItem()
+    // }
+}
