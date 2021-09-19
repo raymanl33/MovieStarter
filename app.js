@@ -46,15 +46,37 @@ const clearMovies = () => {
     myMovieList.innerHTML = '';
 }
 
+const Movie_lower = () => {
+    // create Movie_toLower array that convert Movie array to lowercase
+    Movie_toLower = []
+    for (num in Movie) {
+        Movie_toLower.push(Movie[num].toLowerCase())
+    }
+}
+
 // This function is executed when the user clicks [ADD MOVIE] button.
 const addMovie = () => {
     // Step 1: Get value of input
+    Movie_lower();
     const li = document.createElement("li"); // <li></li>
     const userTypedText = inp.value;
     if (userTypedText.length === 0) {
         alert('The input cannot be blank, please enter again!')
     } else {
-        if (localStorage.getItem(userTypedText) == null) {
+        if (localStorage.getItem(userTypedText) == null && Movie_toLower.includes(userTypedText.toLowerCase()) === true) {
+            console.log('test')
+            for (check in Movie) {
+                if (Movie[check].toLowerCase() === userTypedText.toLowerCase()) {
+                    const add = movie_dict[Movie[check]] + 1
+                    
+                    const storedMovie = localStorage.setItem([Movie[check]], `${add}`)
+                    movie_dict[userTypedText] = Number(add)
+                    console.log(movie_dict)
+                }
+            }
+            
+            
+        } else if (localStorage.getItem(userTypedText) == null && Movie_toLower.includes(userTypedText.toLowerCase()) === false) {
             li;
             const storedMovie = localStorage.setItem(userTypedText, 1);
             movie_dict[userTypedText] = 1;
@@ -64,7 +86,6 @@ const addMovie = () => {
             li.appendChild(textToInsert);
             myMovieList.appendChild(li);
             console.log(storedMovie)
-            
 
         } else if (movie_dict[userTypedText] >= 1) {
             const add = movie_dict[userTypedText] + 1
